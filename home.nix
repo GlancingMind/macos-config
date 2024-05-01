@@ -1,9 +1,17 @@
-{pkgs, ...}: {
+{pkgs, lib, ...}: {
+  imports = [
+    ./modules/shell
+  ];
+
   programs.home-manager.enable = true;
 
   home = {
     homeDirectory = "/Users/sascha";
     stateVersion = "24.05";
+    sessionVariables = {
+      EDITOR = lib.getExe pkgs.neovim;
+      VISUAL = lib.getExe pkgs.neovim;
+    };
   };
 
   xdg = {
@@ -14,18 +22,14 @@
     enable = true;
   };
 
-  programs.zoxide = {
-    enable = true;
-    enableBashIntegration = true;
-    enableZshIntegration = true;
-  };
-
   home.packages = with pkgs; [
+    iterm2
     smartmontools
     unzip zip
     poppler_utils pandoc texlive.combined.scheme-small #for pandoc
-    fd
+    ripgrep fd
     xdg-ninja
+    klog-time-tracker
     (pkgs.writeShellApplication {
       name = "connect-to-thm-vpn";
       runtimeInputs = [pkgs.openconnect];
@@ -54,8 +58,6 @@
     };
   };
 
-  programs.zsh.enable = true;
-
   programs.git = {
     enable = true;
     package = pkgs.gitAndTools.gitFull;
@@ -72,6 +74,29 @@
     extraConfig = {
       pull.ff = "only";
       init.defaultBranch = "main";
+    };
+  };
+
+  programs.mpv = {
+    enable = true;
+    config = {
+      #NOTE use the more frequently updated yt-dlp instead of youtube-dl to
+      # circumvent throtteling issues.
+      script-opts="ytdl_hook-ytdl_path=${lib.getExe pkgs.yt-dlp}";
+    };
+    profiles = {
+      "youtube-1080p" = {
+        ytdl-format="bestvideo[height<=?1080]+bestaudio/best";
+      };
+      "youtube-720p" = {
+        ytdl-format="bestvideo[height<=?720]+bestaudio/best";
+      };
+      "youtube-480p" = {
+        ytdl-format="bestvideo[height<=?480]+bestaudio/best";
+      };
+      "youtube-360p" = {
+        ytdl-format="bestvideo[height<=?360]+bestaudio/best";
+      };
     };
   };
 }

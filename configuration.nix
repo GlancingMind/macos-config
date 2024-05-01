@@ -1,7 +1,7 @@
 { pkgs, lib, inputs,...}: 
 
 let
-  homebrew = import ./homebrew.nix;
+  homebrew = import ./brew.nix;
 in {
   inherit homebrew;
 
@@ -24,6 +24,9 @@ in {
   nix = {
     extraOptions = ''
       experimental-features = nix-command flakes
+      # Allow to build and run x86_64 binaries via rosetta.
+      # Make sure to have rosetta installed: softwareupdate --install-rosetta --agree-to-license
+      extra-platforms = x86_64-darwin aarch64-darwin
     '';
 
     settings = {
@@ -61,4 +64,12 @@ in {
     "/share/zsh"
     "/share/bash-completions"
   ];
+
+  system.defaults = {
+    # disable popup for selection of accent characters on keyrepeat
+    NSGlobalDomain.ApplePressAndHoldEnabled = false;
+    
+    finder.AppleShowAllExtensions = true;
+    finder.FXPreferredViewStyle = "clmv";
+  };
 }

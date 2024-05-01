@@ -7,6 +7,5 @@
   casks = [
     "nikitabobko/tap/aerospace"
     "mrkai77/cask/loop"
-    "aldente"
   ];
 }
