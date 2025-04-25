@@ -1,13 +1,19 @@
-{pkgs, lib, ...}: {
+{pkgs, lib, inputs, ...}: {
   imports = [
     ./modules/shell
   ];
 
   programs.home-manager.enable = true;
 
+  nix = {
+    registry = {
+      nixpkgs.flake = inputs.nixpkgs;
+    };
+  };
+
   home = {
     homeDirectory = "/Users/sascha";
-    stateVersion = "24.05";
+    stateVersion = "24.11";
     sessionVariables = {
       EDITOR = lib.getExe pkgs.neovim;
       VISUAL = lib.getExe pkgs.neovim;
@@ -19,17 +25,23 @@
   };
 
   programs.vscode = {
-    enable = true;
+  #  enable = true;
   };
 
   home.packages = with pkgs; [
-    iterm2
+    nodejs
+    pandoc
+    ollama
+    # vagrant
+    carlito # font used for enterprise architect
+    yt-dlp
     smartmontools
     unzip zip
     poppler_utils pandoc texlive.combined.scheme-small #for pandoc
     ripgrep fd
     xdg-ninja
     klog-time-tracker
+    libgen-cli
     (pkgs.writeShellApplication {
       name = "connect-to-thm-vpn";
       runtimeInputs = [pkgs.openconnect];
@@ -45,6 +57,29 @@
         printf "\n"
 
         echo "$password" | sudo openconnect -u "$username" --passwd-on-stdin vpn.thm.de
+      '';
+    })
+    (pkgs.writeShellApplication {
+      # username: re351san
+      name = "connect-to-htwg-vpn";
+      runtimeInputs = [pkgs.openvpn];
+      text = let
+        config = fetchurl {
+          url = "https://www.htwg-konstanz.de/fileadmin/pub/ou/rz/VPN/HTWG-MFA-SOSE25-STUD.ovpn";
+          sha256 = "1zdlwqy4jhymhwb3kn9qnmg2fl11jcb4jgagvsfmqzkpz7xiyki2";
+        };
+      in ''
+        printf "Enter your login name: "
+        read -r username
+
+        printf "Password: "
+        stty -echo
+        read -r password
+        stty echo
+
+        printf "\n"
+
+        sudo openvpn --config ${config} --auth-user-pass <(echo -e "$username\n$password")
       '';
     })
   ];

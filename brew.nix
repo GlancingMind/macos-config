@@ -5,7 +5,13 @@
     cleanup = "zap";
   };
   casks = [
-    "nikitabobko/tap/aerospace"
     "mrkai77/cask/loop"
+    "aldente"
+    "orbstack"
+    # "zotero"
+    "corretto"
+    "obsidian"
+    "wine-stable"
+    "vmware-fusion"
   ];
 }

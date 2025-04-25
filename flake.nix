@@ -2,9 +2,10 @@
   description = "Example Darwin system flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    #nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nix-darwin = {
-      url = "github:LnL7/nix-darwin";
+      url = "github:LnL7/nix-darwin/nix-darwin-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-homebrew = {
@@ -23,16 +24,16 @@
       url = "github:homebrew/homebrew-bundle";
       flake = false;
     };
-    homebrew-aerospace = {
-      url = "github:nikitabobko/aerospace";
-      flake = false;
-    };
     homebrew-loop = {
       url = "github:mrkai77/loop";
       flake = false;
     };
+    homebrew-winetricks = {
+      url = "github:Winetricks/winetricks";
+      flake = false;
+    };
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -54,8 +55,8 @@
               #"homebrew/homebrew-core" = inputs.homebrew-core;
               #"homebrew/homebrew-cask" = inputs.homebrew-cask;
               #"homebrew/homebrew-bundle" = inputs.homebrew-bundle;
-              #"nikitabobko/tap/aerospace" = inputs.homebrew-aerospace;
               #"mrkai77/cask/loop" = inputs.homebrew-loop;
+              #"winetricks/homebrew-winetricks" = inputs.homebrew-winetricks;
             };
             mutableTaps = true;
           };
@@ -63,7 +64,9 @@
         ./configuration.nix
         home-manager.darwinModules.home-manager
       ];
-      specialArgs = { inherit inputs; };
+      specialArgs = {
+        inherit inputs;
+      };
     };
 
     # Expose the package set, including overlays, for convenience.
