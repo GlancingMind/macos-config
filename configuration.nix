@@ -10,7 +10,7 @@ in {
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
-  system.stateVersion = 4;
+  system.stateVersion = 5;
 
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "aarch64-darwin";
@@ -19,7 +19,7 @@ in {
   in pkg: builtins.elem (lib.getName pkg) unfreePackagesNames;
 
   # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
+  #services.nix-daemon.enable = true;
 
   nix = {
     extraOptions = ''
@@ -51,7 +51,8 @@ in {
     rebuild-system
   ];
 
-  security.pam.enableSudoTouchIdAuth = true;
+  #security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   users.users.sascha.home = "/Users/sascha";
 

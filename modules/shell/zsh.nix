@@ -1,9 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   programs.zsh = {
     defaultKeymap = "viins";
     # grml zsh overrides viins setting, need to apply it again after sourcing gmrl
-    initExtraBeforeCompInit = ''
+    initContent = lib.mkOrder 550 ''
       source ${pkgs.grml-zsh-config}/etc/zsh/zshrc
       bindkey -v
 
