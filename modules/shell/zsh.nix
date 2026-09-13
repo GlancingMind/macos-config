@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 {
   programs.zsh = {
     defaultKeymap = "viins";
@@ -12,7 +12,7 @@
 
     '';
       #export HISTFILE = "$XDG_STATE_HOME/zsh/history";
-    dotDir = ".config/zsh";
+    dotDir =  "${config.xdg.configHome}/zsh";
     enableCompletion = true;
   };
 }

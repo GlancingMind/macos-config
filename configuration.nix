@@ -69,6 +69,7 @@ in {
     "/share/bash-completions"
   ];
 
+  system.primaryUser = "sascha";
   system.defaults = {
     # disable popup for selection of accent characters on keyrepeat
     NSGlobalDomain.ApplePressAndHoldEnabled = false;

@@ -5,13 +5,17 @@
     cleanup = "zap";
   };
   casks = [
+    #"oka-unarchiver"
+    "heroic"
+    #"calibre"
     "mrkai77/cask/loop"
-    "aldente"
-    "orbstack"
+    #"aldente"
+    #"orbstack"
     # "zotero"
-    "corretto"
+    #"corretto"
     "obsidian"
-    "wine-stable"
-    "vmware-fusion"
+    #"wine-stable"
+    #"vmware-fusion"
+    #"eclipse-modeling"
   ];
 }

@@ -24,12 +24,13 @@
     enable = true;
   };
 
-  programs.vscode = {
-  #  enable = true;
-  };
-
   home.packages = with pkgs; [
-    nodejs
+    plantuml
+    ani-cli
+    iina # required for ani-cli
+    catt
+    p7zip
+    cabextract
     pandoc
     ollama
     # vagrant
@@ -37,10 +38,9 @@
     yt-dlp
     smartmontools
     unzip zip
-    poppler_utils pandoc texlive.combined.scheme-small #for pandoc
+    poppler-utils pandoc texlive.combined.scheme-small #for pandoc
     ripgrep fd
     xdg-ninja
-    klog-time-tracker
     libgen-cli
     (pkgs.writeShellApplication {
       name = "connect-to-thm-vpn";
@@ -59,29 +59,6 @@
         echo "$password" | sudo openconnect -u "$username" --passwd-on-stdin vpn.thm.de
       '';
     })
-    (pkgs.writeShellApplication {
-      # username: re351san
-      name = "connect-to-htwg-vpn";
-      runtimeInputs = [pkgs.openvpn];
-      text = let
-        config = fetchurl {
-          url = "https://www.htwg-konstanz.de/fileadmin/pub/ou/rz/VPN/HTWG-MFA-SOSE25-STUD.ovpn";
-          sha256 = "1zdlwqy4jhymhwb3kn9qnmg2fl11jcb4jgagvsfmqzkpz7xiyki2";
-        };
-      in ''
-        printf "Enter your login name: "
-        read -r username
-
-        printf "Password: "
-        stty -echo
-        read -r password
-        stty echo
-
-        printf "\n"
-
-        sudo openvpn --config ${config} --auth-user-pass <(echo -e "$username\n$password")
-      '';
-    })
   ];
 
   programs.direnv = {
@@ -95,20 +72,36 @@
 
   programs.git = {
     enable = true;
-    package = pkgs.gitAndTools.gitFull;
+    package = pkgs.gitFull;
     signing = {
       # Signing key for my public commits and repos.
       key = "0x6958F57B10911518";
     };
+    settings = {
+      pull.ff = "only";
+      init.defaultBranch = "main";
+    };
     delta = {
       enable = true;
       options = {
-        syntax-theme="gruvbox-light";
+        hyperlinks = true; # make file paths clickable in terminal
+        hyperlinks-file-link-format = "vscode://file/{path}:{line}"; # open link in vscode
+        features = "decorations interactive";
+        interactive = {
+          keep-plus-minus-maters = false;
+        };
+        decorations = {
+          
+        };
       };
     };
-    extraConfig = {
-      pull.ff = "only";
-      init.defaultBranch = "main";
+  };
+
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      syntax-theme="gruvbox-light";
     };
   };
 
